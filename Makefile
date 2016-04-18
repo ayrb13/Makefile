@@ -1,6 +1,3 @@
-##############################################################################################################
-#config begin
-
 #compile option
 CXX	:= g++
 CC	:= gcc
@@ -8,21 +5,23 @@ OPT	:= -g -O0 -ggdb -Wall -Wno-deprecated -Wno-unused-function -Wno-unused-varia
 AR	:= ar rc
 
 #head file and lib file
-LIBDIRS	:= /usr/local/lib ../deps/log ../deps/leveldb-1.18 /usr/lib64/mysql ../deps/mysql /usr/local/mysql5.5/lib ../deps/tinyxml
-LIBS	:= pthread boost_system boost_thread protobuf leveldb boost_filesystem mysqlclient mysql zookeeper_mt zlog tinyxml
-INCDIRS	:= ../deps/leveldb-1.18/include ../deps/log ../deps/tinyxml ../deps/mysql /usr/local/mysql5.5/include /usr/local/include/zookeeper ..
+LIBDIRS	:= #../taxi/src/thirdparty/protobuf/lib
+LIBS	:= #protobuf
+INCDIRS	:= ../taxi/src/thirdparty/json-c/include
+STLIBS	:= \
+	../taxi/src/thirdparty/json-c/lib/libjson-c.a
 
 #define macro
 MACROS	:=
 
 #files should be solved
-SRCDIRS	:= . ../base ../proto ../arc-im/auth-zookeeper
+SRCDIRS	:= . 
 SRCEXTS	:= .cpp .cc .cxx
 SRCS	:=
 
 #target
 TYPE	:= exe#(exe lib dll)
-TARGET	:= arc_rec
+TARGET	:= main
 
 #config end
 ###############################################################################################################
@@ -48,7 +47,7 @@ $(TARGET):$(OBJS)
 ifeq ("$(TYPE)","lib")
 	$(AR) $(TARGET) $^
 else
-	$(CXX) $(OPT) -o $(TARGET) $^ $(LIBDIROPT) $(LIBOPT)
+	$(CXX) $(OPT) -o $(TARGET) $^ $(LIBDIROPT) $(LIBOPT) $(STLIBS)
 endif
 
 %.o:%.c
